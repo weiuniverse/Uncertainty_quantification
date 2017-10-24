@@ -2,6 +2,17 @@
 ## some useful docs:
 https://zhuanlan.zhihu.com/p/26319993
 
+## data description：
+You are provided with two sample bootstrapping outputs each containing the four following files:
+
+Quant_bootstraps.tsv  containing the matrix of bootstrap experiments containing the final count for each transcript in each round of bootstrapping with a row be a bootstrap output and columns be list of transcripts.
+
+Poly_truth.tsv: true counts for each transcript
+
+Eq_classes.txt: list of equivalence classes and their information
+
+Quant.sf: estimated quantifications for each transcript
+
 ## Project Description:
 
 Salmon is a state-of-the-art tool for measuring gene expression (quantifying the abundance of different RNA transcripts in an experiment). One of the primary benefits of this method is that it is orders of magnitude faster than the competition, while producing results of the same or better accuracy. Salmon determines expression levels by solving a maximum likelihood problem. A result of this formulation is that one often gets accurate estimates of the transcript abundances, but has no notion of confidence in these predictions. That is, predictions can be highly specific and highly accurate, or highly specific and highly inaccurate --- this depends on the “shape” of the likelihood function, and how optimization proceeds. Thus, it is very valuable to provide some measure of confidence in the estimates that are inferred. There are a number of ways to estimate such confidence. One way is “bootstrapping”. This approach treats the observed sample data as the population, samples from the original data a number of times, and reruns the maximum likelihood estimator independently on all of these samples. By looking at the distribution of these different runs, one can form an empirical confidence interval, that provides a notion of the uncertainty of the maximum likelihood point estimate. However, a close inspection on simulated data demonstrates that these empirical intervals fail to capture the uncertainty adequately (i.e., they tend to underestimate the uncertainty).  
