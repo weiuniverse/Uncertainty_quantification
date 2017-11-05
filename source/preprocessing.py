@@ -27,9 +27,9 @@ lines = quant.readlines()
 for line in lines:
     line = line[:-1]
     l = line.split('\t')
-    print len(l)
-    if len(l) <> 5:
-        print "error"
+    print(len(l))
+    if (len(l) <> 5):
+        print ("error")
         break
 # quant  = tsv.TsvReader(open("../data/poly_mo/quant.sf"))
 # for parts in quant:
