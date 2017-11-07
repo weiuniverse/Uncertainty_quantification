@@ -25,6 +25,20 @@ Our goal is to <b>filter out these failed transcripts, find common properties be
 
 ---
 
+## Parse quant_bootstraps.tsv
+This file gives us the bootstrap data (200 rounds of sample taking).  
+Note: we are using `DataFrame` from the `pandas` package to easier do data analysis.
+```python
+quant_bootstraps = tsv.TsvReader(open(root_path + 
+				  "quant_bootstraps.tsv"))
+quant_boot = [line for line in quant_bootstraps]
+```
+```python
+df_quant_boot = pd.DataFrame.from_records(quant_boot[1:], 
+				    columns=quant_boot[0])
+```
+---
+
 ## Parse poly_truth.tsv
 This file gives us the true count of each transcript.
 ```python
@@ -43,21 +57,7 @@ df_poly_truth['transcript_id']=
 		df_poly_truth['transcript_id'].astype(str)
 df_poly_truth['count']=df_poly_truth['count'].astype(int)
 ```
----
 
-## Parse quant_bootstraps.tsv
-This file gives us the bootstrap data (201 rounds of sample taking).
-
-
-```python
-quant_bootstraps = tsv.TsvReader(open(root_path + "quant_bootstraps.tsv"))
-
-quant_boot = [line for line in quant_bootstraps]
-```
-```python
-df_quant_boot = pd.DataFrame.from_records(quant_boot[1:], 
-				    columns=quant_boot[0])
-```
 ---
 
 We find and retrieve the intersecting transcript ids of poly_truth and quant_bootstraps, and sort each id's data by ascending order. There are transcripts in quant_bootstraps that don't show up in poly_truth, we'll deal with them later.
@@ -130,7 +130,8 @@ df_quant = pd.DataFrame.from_records(quant[1:],
 					 columns=quant[0])
 df_quant.Name = df_quant.Name.astype(str)
 df_quant.Length = df_quant.Length.astype(int)
-df_quant.EffectiveLength = df_quant.EffectiveLength.astype(float)
+df_quant.EffectiveLength = df_quant.EffectiveLength.astype
+						   (float)
 df_quant.TPM = df_quant.TPM.astype(float)
 df_quant.NumReads = df_quant.NumReads.astype(float)
 ```
