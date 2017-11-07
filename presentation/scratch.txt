@@ -1,0 +1,19 @@
+Our team is doing proj 3, uncertainty quantification. 
+A brief description. There's a tool called salmon that gives estimates of transcript abundances. Using a 'bootstrapping' technique we can measure the confidence in these estimates, but this approach tends to underestimate the uncertainty with a lot more transcripts falling out of the interval than expected. Our midway goal is to filter out the failed transcripts and find common properties between them.
+
+-- above can be ignored if not first team to present proj 3 --
+
+Our approach is to first parse the data files, of course, then find the range of confidence interval for each transcript, filter out the failed transcripts, and finally group data by true/failed transcripts and do some data analysis to find some common properties.
+About the implementation details. This is our code for parsing the bootstrap data, and as you can see we are using dataframe from pandas package for easier data analysis later on.
+This is for parsing poly_truth.
+After we do the parsing we find & retrieve intersecting transcript ids of both, and sort the data from bootstrap in ascending order. there are transcripts in bootstrap that dont show up in poly_truth, we'll deal with them later.
+We then find the 95% confidence interval by locating the nums at these two indices, which serve as a lower and upper bound.
+Then we find the transcripts that fall out of this range and mark them as failed transcripts.
+Now with the failed transcripts covered, we add the transcripts that were earlier ignored because of no presence in poly_truth to the 'true' transcripts. We use 0 and 1 to label failed and true for further grouping.
+quant.sf gives us some attributes by salmon we need.
+Now we group the data and observe the mean, standard variance, max and min of each group.
+For the mean, average TPM and NumReads are alot bigger than true ones.
+Same pattern for standard variance.
+Min value don't seem to provide much other than maybe a slightly bigger length.
+From the max value we assume failed transcripts do not seem to appear in very long lengths and effective lengths.
+Combined with the info from std, we find the TPM and NumRead of failed transcripts have a wide range of TPM with wide variance, and a narrow range of NumReads with wide variance.
