@@ -183,23 +183,112 @@ This looks more clear when we plot the distribution:
 ## Classification Models
 We used `sklearn` package for this.  
 
-First we gave <b>linear regression</b> a shot, and we ended up with:  
+We use models to predict whether transcripts are true or false. We use data in `poly_mo` folder for our models. After shuffling our data, we make the the properties Length, EffectiveLength, TPM, NumReads as X and label as Y. We then split our data so that we can use 90% of our data as train data and other 10% as test data.  
 
-mse= 0.24674520923824544
-accuracy= 0.5450268817204301  
+Note: Because we shuffle our data and randomly select train and test data, the result of our models may be a little bit different whenever you rerun the code.  
+```python
+sfdata = shuffle(data) # make the data random
+input_data = sfdata[['Length','EffectiveLength','TPM','NumReads']]
+input_label = sfdata['label']  
+
+train = int(len(input_data)*9/10)
+test = train+1
+train_data = input_data[0:train]
+train_label = input_label[0:train]
+test_data = input_data[test:]
+test_label = input_label[test:]
+
+def trans_onehot(labels):
+    onehot_labels = []
+    for label in labels:
+        if label==0:
+            onehot_labels.append([0,1])
+        else:
+            onehot_labels.append([1,0])
+    return onehot_labels
+    
+train_onehot_label = trans_onehot(train_label)
+test_onehot_label = trans_onehot(test_label)
+```
+
+---
+**Linear Regression**
+First we gave **linear regression** a shot, and we ended up with:  
+
+mean squared error = 0.1550110959836294   
+accuracy= 0.6547798066595059  
 
 The results were not ideal. Looks like it  doesn't seem to be  linear, so we tried another classification model.
+```
+lr = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+lr.fit(dropped_train_data,dropped_train_label)
+lr_regr = lr.predict(dropped_test_data)
+lr_alpha = 0.5
+lr_pred = cal_pred(lr_regr,alpha)
+
+lr_mse = cal_mse(lr_regr,dropped_test_label)
+lr_accuracy = cal_accuracy(lr_pred,dropped_test_label)
+```
 
 ---
 
-With <b>support vector regression</b>, we achieved:
+**Support Vector Regression**  
 
-mse= 0.06162988735258758
-accuracy= 0.8892588614393125  
+With **support vector regression**, we achieved:
 
-88.9% was a pretty high accuracy level, but we also managed to reach:  
+mean squared error = 0.06162988735258758   
+accuracy = 0.9667338709677419  
 
-mse= 0.06162988735258758
-accuracy= 0.9667338709677419
+96.7% accuracy better than linear regression.  
+```python
+clf = SVR(C=1.0, epsilon=0.2)
+clf.fit(dropped_train_data,dropped_train_label)
 
-96.7% accuracy after we dropped the '0' count value transcripts from the 'true' group.
+svr_regr = clf.predict(dropped_test_data)
+svr_mse = cal_mse(svr_regr,dropped_test_label)
+svr_alpha = 0.5
+svr_pred = cal_pred(svr_regr,svr_alpha)
+svr_accuracy = cal_accuracy(svr_pred,dropped_test_label)
+```
+
+---  
+
+**Neural network**  
+
+We implemented a simple Nerual network model with 4 hidden layers using Keras. However, this is only a initial model. We will modify the parameters to achieve a comparable accuracy.  
+
+Nerual Network accuracy = 0.7560483870967742  
+```python
+train_X = dropped_train_data.as_matrix()
+train_Y = dropped_train_label.as_matrix()
+train_X = np.reshape(train_X,(len(train_X),4))  
+train_Y = np.reshape(train_Y,(len(train_Y),1))  
+n_samples = train_X.shape[0]
+
+model = Sequential()
+model.add(Dense(8, input_shape=(4,)))
+model.add(Activation('tanh'))
+model.add(Dense(16))
+model.add(Activation('tanh'))
+model.add(Dense(4))
+model.add(Dense(1))
+
+model.compile(optimizer='rmsprop', loss='mse')
+model.fit(train_X, train_Y, epochs=100, batch_size=64)
+
+Test = dropped_test_data.as_matrix()
+Test_label = dropped_test_label.as_matrix()
+nn_regr = model.predict(Test)
+nn_pred = cal_pred(nn_regr,0.5)
+nn_pred = cal_pred(nn_regr,0.5)
+diff = nn_pred-Test_label
+diff = diff.tolist()
+right_count = diff.count(0)
+nn_accuracy = right_count/len(diff)
+```
+
+---
+## Next Steps
+We plan to:  
+- Put `eq_classes.txt` into use and adjust the interval  
+- Modify parameters in our model to improve accuracy
