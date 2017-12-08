@@ -83,9 +83,6 @@ def sort_bootstrap(df_quant_boot,truth_id):
     return df_qb_sorted,sort_qb,use_id
 
 
-
-
-
 # ## Eq_classes.txt
 #     Eq_classes.txt: list of equivalence classes and their information
 def read_eq_classes(root_path):
@@ -218,6 +215,7 @@ def find_the_min():
     file.close()
     print(min,min_alpha)
     return min,min_alpha
+
 # ## root path
 root_path = "../data/poly_mo/"
 loop_for_penaty(root_path)
