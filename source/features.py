@@ -42,14 +42,6 @@ df_quant.NumReads = df_quant.NumReads.astype(float)
 
 # eq_classes
 
-# we now have:
-# df_quant_boot_mean
-# df_quant_boot_std
-# df_quant.Name
-# df_quant.Length
-# df_quant.EffectiveLength
-# df_quant.TPM
-# df_quant.NumReads
 
 fixed_dfquant_boot = df_quant_boot.copy()
 columns = fixed_dfquant_boot.columns
@@ -78,6 +70,22 @@ for id in columns:
     if float(percent97dot5[id]) == 0:
         remove_ids.append(id)
 
-new_columns = set(columns) - set(remove_ids)
-new_columns = list(new_columns)
+new_columns = list(set(columns) - set(remove_ids))
 fixed_dfquant_boot = fixed_dfquant_boot[new_columns] 
+
+fixed_dfquant = df_quant.copy()
+print(len(fixed_dfquant.Name)) # 93109
+for rid in remove_ids:  # too slow
+    fixed_dfquant = fixed_dfquant[fixed_dfquant.Name != rid]
+print(len(fixed_dfquant.Name)) # 33965
+
+# we now have:
+# fixed_dfquant_boot from df_quant_boot
+# fixed_dfquant from from df_quant
+# mean: fixed_dfquant_boot.mean()
+# std:  fixed_dfquant_boot.std()
+# fixed_dfquant.Name
+# fixed_dfquant.Length
+# fixed_dfquant.EffectiveLength
+# fixed_dfquant.TPM
+# fixed_dfquant.NumReads
