@@ -8,9 +8,9 @@ root_path = "../data/poly_mo/"
 
 # preprocess data files
 
-# Quant_bootstraps.tsv :containing the matrix of bootstrap experiments 
-# containing the final count for each transcript in each round of bootstrapping 
-# with a row be a bootstrap output and columns be list of transcripts. 
+# Quant_bootstraps.tsv :containing the matrix of bootstrap experiments
+# containing the final count for each transcript in each round of bootstrapping
+# with a row be a bootstrap output and columns be list of transcripts.
 quant_bootstraps = tsv.TsvReader(open(root_path+"quant_bootstraps.tsv"))
 count = 0
 quant_boot = []
@@ -57,7 +57,7 @@ columns = fixed_dfquant_boot.columns
 sort_qb = []
 for id in columns:
     try:
-        listed = list(df_quant_boot[id])        
+        listed = list(df_quant_boot[id])
     except KeyError:
         pass
     else:
@@ -80,4 +80,9 @@ for id in columns:
 
 new_columns = set(columns) - set(remove_ids)
 new_columns = list(new_columns)
-fixed_dfquant_boot = fixed_dfquant_boot[new_columns] 
+fixed_dfquant_boot = fixed_dfquant_boot[new_columns]
+
+df_quant_boot_std = fixed_dfquant_boot.std()
+df_quant_boot_mean = fixed_dfquant_boot.mean()
+
+df_propeties = fixed_dfquant_boot.merge(df_quant, on='Name')
