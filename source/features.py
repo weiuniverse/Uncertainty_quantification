@@ -70,18 +70,19 @@ for id in columns:
     if float(percent97dot5[id]) == 0:
         remove_ids.append(id)
 
-<<<<<<< HEAD
-new_columns = set(columns) - set(remove_ids)
-new_columns = list(new_columns)
-fixed_dfquant_boot = fixed_dfquant_boot[new_columns]
+# <<<<<<< HEAD
+# new_columns = set(columns) - set(remove_ids)
+# new_columns = list(new_columns)
+# fixed_dfquant_boot = fixed_dfquant_boot[new_columns]
 
-df_quant_boot_std = fixed_dfquant_boot.std()
-df_quant_boot_mean = fixed_dfquant_boot.mean()
+# df_quant_boot_std = fixed_dfquant_boot.std()
+# df_quant_boot_mean = fixed_dfquant_boot.mean()
 
-df_propeties = fixed_dfquant_boot.merge(df_quant, on='Name')
-=======
+# df_propeties = fixed_dfquant_boot.merge(df_quant, on='Name')
+
+# =======
 new_columns = list(set(columns) - set(remove_ids))
-fixed_dfquant_boot = fixed_dfquant_boot[new_columns] 
+fixed_dfquant_boot = fixed_dfquant_boot[new_columns]
 
 fixed_dfquant = df_quant.copy()
 print(len(fixed_dfquant.Name)) # 93109
@@ -99,4 +100,4 @@ print(len(fixed_dfquant.Name)) # 33965
 # fixed_dfquant.EffectiveLength
 # fixed_dfquant.TPM
 # fixed_dfquant.NumReads
->>>>>>> 09406d96d473760b97299be9be168af23b18298b
+# >>>>>>> 09406d96d473760b97299be9be168af23b18298b
