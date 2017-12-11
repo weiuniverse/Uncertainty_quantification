@@ -74,8 +74,8 @@ percent2dot5 = df_qb_sorted.loc[int(sum*0.025)-1]
 percent97dot5 = df_qb_sorted.loc[int(sum*0.975)-1]
 
 remove_ids = []
-for id in percent97dot5:
-    if percent97dot5[id] == 0:
+for id in columns:
+    if float(percent97dot5[id]) == 0:
         remove_ids.append(id)
 
 new_columns = set(columns) - set(remove_ids)
