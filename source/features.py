@@ -65,8 +65,8 @@ for id in columns:
         sort_qb.append(listed)
 sort_qb = list(map(list,zip(*sort_qb)))
 
-df_qb_sorted = pd.DataFrame.from_records(sort_qb, columns=use_id)
-df_poly_truth = df_poly_truth.set_index(['transcript_id'])
+df_qb_sorted = pd.DataFrame.from_records(sort_qb, columns=columns)
+
 sum = len(sort_qb)
 print(int(sum*0.025))
 print(int(sum*0.975))
