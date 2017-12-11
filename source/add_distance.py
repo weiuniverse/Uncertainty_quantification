@@ -28,4 +28,5 @@ distance
 for tid in id_in_quant_boot:
     if tid in distance:
         for i in range(len(df_quant_boot[tid])):
-            df_quant_boot[tid][i] += distance[tid]
+            if -1000 < distance[tid] < 1000:
+                df_quant_boot[tid][i] -= distance[tid]
